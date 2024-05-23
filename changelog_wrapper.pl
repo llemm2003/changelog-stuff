@@ -39,7 +39,7 @@ sub accepted_parameter {
 	#Look-up table for accepted parameter. 
 	my @accepted_parameter_name=('ticket_id','ticket_action','change_type');
 	foreach my $stg_var (@accepted_parameters) {
-		#This will test parameters and parameter values. ticket_id should follow the ticket id format.(CX only). Change type should only have the accepted value of STOP START of CIUPDATE(insensitive). 
+		#This will test parameters and parameter values. ticket_id should follow the ticket id format.(CX only). Change type should only have the accepted value of STOP START or CIUPDATE(insensitive). 
 		if ( $stg_var=~/^-(ticket_id)=(\d{6}-\d{6})\z/ or $stg_var=~/^-(ticket_action)=([\w\s\.\',].*)/ or $stg_var=~/^-(change_type)=(?i)(STOP|START|CIUPDATE)/ ) {
 			if ( $1 eq 'change_type' ) {
 				my $tmp_string=$2;
