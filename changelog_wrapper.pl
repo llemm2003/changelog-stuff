@@ -6,6 +6,26 @@ eventhough the changelogging script was executed.
 
 The print out of this script will show the changelog and can be used for screenshot and evidence on compliance. 
 
+How to use:
+
+Mandatory parameters(script will exit if this is not supplied). 
+
+-ticket_id=<ticket id>
+-ticket_action=<action taken>
+
+Non mandatory.
+-change_type=start/stop/ciupdate(default is ciupdate)
+
+Ex:
+Ticket number = 123456-131072
+Ticket action = "Blah blah blah"
+change_type = start/stop/ciupdate
+
+changelog_wrapper.pl -ticket_id=123456-131072 -ticket_action="Blah blah blah" -change_type=ciupdate
+or
+changelog_wrapper.pl -ticket_id=123456-131072 -ticket_action="Blah blah blah" 
+
+
 =cut
 use strict; use warnings;
 
@@ -16,11 +36,11 @@ my $change_log_file='/var/log/change/change.log';
 sub accepted_parameter {
 	my @accepted_parameters=@_;
 	my %parameter_test;
-	#List of accepted parameter. 
+	#Look-up table for accepted parameter. 
 	my @accepted_parameter_name=('ticket_id','ticket_action','change_type');
 	foreach my $stg_var (@accepted_parameters) {
 		#This will test parameters and parameter values. ticket_id should follow the ticket id format.(CX only). Change type should only have the accepted value of STOP START of CIUPDATE(insensitive). 
-		if ( $stg_var=~/^-(ticket_id)=(\d{6}-\d{6})/ or $stg_var=~/^-(ticket_action)=([\w\s\.\',].*)/ or $stg_var=~/^-(change_type)=(?i)(STOP|START|CIUPDATE)/ ) {
+		if ( $stg_var=~/^-(ticket_id)=(\d{6}-\d{6})\z/ or $stg_var=~/^-(ticket_action)=([\w\s\.\',].*)/ or $stg_var=~/^-(change_type)=(?i)(STOP|START|CIUPDATE)/ ) {
 			if ( $1 eq 'change_type' ) {
 				my $tmp_string=$2;
 				$tmp_string=~s/(?<rct>\w)/\u$+{rct}/g;#make it uppercase
