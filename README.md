@@ -6,8 +6,8 @@
 	
 	Mandatory parameters(script will exit if this is not supplied). 
 
-	-ticket_id=<ticket id>
-	-ticket_action=<action taken>
+	-ticket_id="Ticket number"
+	-ticket_action="action taken"
 
 	Non mandatory.
 	-change_type=start/stop/ciupdate(default is ciupdate)
