@@ -1,7 +1,7 @@
 # changelog stuff
  Scripts related to changelogging. 
 
-1. changelog.pl
+1. changelog_wrapper.pl
 	Just a changelog.sh wrapper. 
 	
 2. json_writer.sql
