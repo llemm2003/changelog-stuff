@@ -99,6 +99,9 @@ END;
 BEGIN /*MAIN*/
 	--DG CHECK
 	SELECT NVL(value,'NO DG') INTO g_log_archive_config from v$parameter where name='log_archive_config';
+	IF g_log_archive_config <> 'NO DG' THEN
+		g_log_archive_config := 'DG';
+	END IF;
 	--END OF DG CHECK
 	
 	--Lifcycle check
@@ -117,7 +120,7 @@ BEGIN /*MAIN*/
 	execute immediate (g_json_select_string) into g_lifecycle;
 	dbms_output.put_line('LIFECYCLE =>'||g_lifecycle);
 	--END of lifecycle check.
-	dbms_output.put_line('DG =>'||g_log_archive_config);
+	dbms_output.put_line('DG mode =>'||g_log_archive_config);
 END  /*MAIN*/;
 
 
