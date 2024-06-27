@@ -10,8 +10,8 @@ Since Lifecycle information of the DB is not anywhere inside the DB. This script
 /var/tmp/platform_deploy.json
 
 Using the JSON query expression: '.deploymentVariables."Environment Code".name' 
-
 */
+
 /*JSON RELATED VARIABLES*/
 g_tmp_string varchar2(200);
 g_json_dir_alias varchar2(13) := 'JSON_DIR_TEST';
