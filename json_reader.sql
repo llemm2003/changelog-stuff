@@ -31,6 +31,7 @@ g_os_directory_names g_os_directory_type := g_os_directory_type('/var/tmp/','/op
 
 /*DG RELATED VARIABLES*/
 g_log_archive_config varchar2(50) ;
+g_standby_file_management varchar2(20);
 
 /*END OF DG RELATED VARIABLES*/
 FUNCTION Create_Test_PDJ (in_directory_alias IN varchar2, in_os_directory IN varchar2, in_pdj_file IN varchar2) RETURN varchar2 IS
@@ -99,10 +100,13 @@ END;
 BEGIN /*MAIN*/
 	--DG CHECK
 	SELECT NVL(value,'NO DG') INTO g_log_archive_config from v$parameter where name='log_archive_config';
+	SELECT upper(value) INTO g_standby_file_management from v$parameter where name='standby_file_management';
 	IF g_log_archive_config <> 'NO DG' THEN
 		g_log_archive_config := 'DG';
 	END IF;
 	--END OF DG CHECK
+	
+	--
 	
 	--Lifcycle check
 	FOR i IN g_os_directory_names.FIRST..g_os_directory_names.LAST 
@@ -118,13 +122,20 @@ BEGIN /*MAIN*/
 	g_json_dir_alias := 'JSON_DIR';
 	Create_populate_table_JSON(g_temporary_table,g_json_dir_alias,g_working_dir,g_json_os_filename);
 	execute immediate (g_json_select_string) into g_lifecycle;
-	dbms_output.put_line('LIFECYCLE =>'||g_lifecycle);
+	IF g_lifecycle = 'Production' AND g_log_archive_config <> 'DG' AND g_standby_file_management = 'MANUAL' THEN
+		dbms_output.put_line('LIFECYCLE =>'||g_lifecycle);
+		dbms_output.put_line('DG Mode =>'||g_log_archive_config);
+		dbms_output.put_line('Standby file management =>'||g_standby_file_management);
+	END IF;
 	--END of lifecycle check.
-	dbms_output.put_line('DG mode =>'||g_log_archive_config);
 END  /*MAIN*/;
 
 
 /*
 History:
-June 25, 2024 Rommell Sabino
+June 25, 2024 	rsabino
+Aug 8, 2024		rsabino: Modified the sql to only show something if:
+				1. If Production
+				2. Has Standby
+				3. Standby_file_management is MANUAL
 */
